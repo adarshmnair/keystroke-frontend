@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Paper,
@@ -30,6 +30,7 @@ const isValidEmail = (email) => {
 };
 
 const KeystrokeTracker = () => {
+  const [isMobile, setIsMobile] = useState(false);
   const [user, setUser] = useState({ name: "", email: "" });
   const [userEntered, setUserEntered] = useState(false);
   const [texts] = useState(meaningfulPhrases);
@@ -39,6 +40,26 @@ const KeystrokeTracker = () => {
   const [error, setError] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const API_URL = process.env.REACT_APP_API_URL;
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth <= 768);
+  }, []);
+
+  if (isMobile) {
+    return (
+      <Container maxWidth="sm" sx={{ mt: 4, textAlign: "center" }}>
+        <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
+          <Typography variant="h5" color="error" gutterBottom>
+            🚫 Please open this application on a laptop or desktop.
+          </Typography>
+          <Typography variant="body1">
+            This application is optimized for larger screens and requires a
+            physical keyboard for accurate keystroke tracking.
+          </Typography>
+        </Paper>
+      </Container>
+    );
+  }
 
   const handleUserSubmit = () => {
     if (!user.name.trim() || !user.email.trim()) {
